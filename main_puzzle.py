@@ -58,22 +58,22 @@ def colored_blocks(board: list) -> list:
     [' 9 5   31', ' 83  1   ', '  1   4  ', ' 8  2  6 ', '  2    3 ']
     """
     vertical_blocks, horizontal_blocks, blocks = [], [], []
-    a, b = 0, 5
-    c, d = 4, 9
+    a_row, b_row = 0, 5
+    c_row, d_row = 4, 9
     for i in range(4, -1, -1):
         row = []
-        for j in range(a, b):
+        for j in range(a_row, b_row):
             row.append(board[j][i])
         vertical_blocks.append(''.join(row))
-        a += 1
-        b += 1
+        a_row += 1
+        b_row += 1
     for i in range(4, 9):
         row = []
-        for j in range(c, d):
+        for j in range(c_row, d_row):
             row.append(board[i][j])
         horizontal_blocks.append(''.join(row))
-        c -= 1
-        d -= 1
+        c_row -= 1
+        d_row -= 1
     for i in range(len(horizontal_blocks)):
         row = []
         row = horizontal_blocks[i] + vertical_blocks[i][0:-1]
