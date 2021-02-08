@@ -1,18 +1,6 @@
 """git repo link: https://github.com/vsaliievaa/Puzzle-Game """
 
 
-def read_input(path):
-    """
-    Takes a path to the .txt file as a string and returns a game board
-    as a list of strings.
-    """
-    board = []
-    with open(path, 'r', encoding='utf-8') as file:
-        for line in file:
-            board.append(line.strip())
-    return board
-
-
 def form_columns(board: list) -> list:
     """
     Takes the game board as a list of rows, "rotates" it and returns a list of columns.
@@ -21,6 +9,10 @@ def form_columns(board: list) -> list:
         "     9 5 ", " 6  83  *", "3   1  **", "  8  2***", "  2  ****"])
     ['****  3  ', '***  6   ', '** 4   82', '*1       ', '  31 81  ',\
  '****93 2*', '****   **', '****5 ***', '**** ****']
+    >>> form_columns(["****9****", "***98****", "**987****", "*9876****",\
+        "987654321", "87654321*", "7654321**", "654321***", "54321****"])
+    ['****98765', '***987654', '**9876543', '*98765432', '987654321',\
+ '****4321*', '****321**', '****21***', '****1****']
     """
     columns = []
     for i in range(len(board)):
@@ -36,6 +28,15 @@ def uniqueness_check(board: list) -> bool:
     Checks the given rows for uniqueness. Returns True
     if numbers from 1 to 9 are in a given row, False otherwise.
 
+    >>> uniqueness_check(["**** ****", "***1 ****", "**  3****", "* 4 1****",\
+        "     9 5 ", " 6  83  *", "3   1  **", "  8  2***", "  2  ****"])
+    True
+    >>> uniqueness_check(['****  3  ', '***  6   ', '** 4   82', '*1       ', '  31 81  ',\
+        '****93 2*', '****   **', '****5 ***', '**** ****'])
+    False
+    >>> uniqueness_check(['****98765', '***987654', '**9876543', '*98765432',\
+        '987654321', '****4321*', '****321**', '****21***', '****1****'])
+    True
     """
     for i in range(len(board)):
         lst = []
@@ -51,6 +52,10 @@ def colored_blocks(board: list) -> list:
     """
     Takes a game board and forms a list of lists, which represents
     coloured blocks on this board. Each colored block consists of 9 cells.
+
+    >>> colored_blocks(["**** ****", "***1 ****", "**  3****", "* 4 1****",\
+        "     9 5 ", " 6  83  *", "3   1  **", "  8  2***", "  2  ****"])
+    [' 9 5   31', ' 83  1   ', '  1   4  ', ' 8  2  6 ', '  2    3 ']
     """
     vertical_blocks, horizontal_blocks, blocks = [], [], []
     a, b = 0, 5
@@ -71,17 +76,23 @@ def colored_blocks(board: list) -> list:
         d -= 1
     for i in range(len(horizontal_blocks)):
         row = []
-        row = horizontal_blocks[i] + vertical_blocks[i]
+        row = horizontal_blocks[i] + vertical_blocks[i][0:-1]
         blocks.append(row)
     return blocks
 
 
-def validate_board(path: str) -> bool:
+def validate_board(board: list) -> bool:
     """
     Main function. Returns True if all three rules are satisfied for the given board
     and False otherwise.
+
+    >>> validate_board(["**** ****", "***1 ****", "**  3****", "* 4 1****",\
+        "     9 5 ", " 6  83  *", "3   1  **", "  8  2***", "  2  ****"])
+    False
+    >>> validate_board(['****98765', '***987654', '**9876543', '*98765432',\
+        '987654321', '****4321*', '****321**', '****21***', '****1****'])
+    True
     """
-    board = read_input(path)
     if uniqueness_check(board) and uniqueness_check(form_columns(board)):
         if uniqueness_check(colored_blocks(board)):
             return True
